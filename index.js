@@ -1,15 +1,24 @@
-// const contacts = require("./db/contacts.json");
 const contacts = require("./contacts");
 
-// const { listContacts, getContactById } = require("./contacts");
-
 // const argv = require("yargs").argv;
+const { Command } = require("commander");
+const program = new Command();
+program
+  .option("-a, --action <type>", "choose action")
+  .option("-i, --id <type>", "user id")
+  .option("-n, --name <type>", "user name")
+  .option("-e, --email <type>", "user email")
+  .option("-p, --phone <type>", "user phone");
+
+program.parse(process.argv);
+
+const argv = program.opts();
 
 async function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
     case "list":
       const allContacts = await contacts.listContacts();
-      return console.log(allContacts);
+      return console.table(allContacts);
 
     case "get":
       const oneContact = await contacts.getContactById(id);
@@ -28,7 +37,7 @@ async function invokeAction({ action, id, name, email, phone }) {
   }
 }
 
-// invokeAction(argv);
+invokeAction(argv);
 // invokeAction({ action: "list" });
 // invokeAction({ action: "get", id: "qdggE76Jtbfd9eWJHrssH" });
 // invokeAction({
@@ -37,4 +46,4 @@ async function invokeAction({ action, id, name, email, phone }) {
 //   email: "kate@mail.com",
 //   phone: "(000)111222",
 // });
-invokeAction({ action: "get", id: "qdggE76Jtbfd9eWJHrssH" });
+// invokeAction({ action: "get", id: "qdggE76Jtbfd9eWJHrssH" });
